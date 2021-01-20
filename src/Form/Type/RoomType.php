@@ -13,6 +13,7 @@ use App\Entity\AuditTomAbteilung;
 use App\Entity\Server;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -28,6 +29,7 @@ class RoomType extends AbstractType
     {
 
         $builder
+
             ->add('server', EntityType::class, [
                 'choice_label' => 'url',
                 'class' => Server::class,
@@ -38,6 +40,10 @@ class RoomType extends AbstractType
                 'required' => true,
             ])
             ->add('name', TextType::class, ['required' => true, 'label' => 'Name der Konferenz', 'translation_domain' => 'form'])
+           ->add('beschreibung',TextareaType::class,array(
+               'required'=>false,
+               'label'=>'Was ist das Thema'
+           ))
             ->add('start', DateTimeType::class, ['attr'=>['class'=>'flatpickr'],'label' => 'Start', 'translation_domain' => 'form', 'widget' => 'single_text'])
             ->add('duration', ChoiceType::class, [
                 'label' => 'Dauer der Konferenz',
@@ -53,6 +59,10 @@ class RoomType extends AbstractType
                     '8 Stunden' => 480,
                 ]
             ])
+            ->add('public',CheckboxType::class,array(
+                'label'    => 'Diese Konferenz ist Öffentlich',
+                'required' => false,
+            ))
             ->add('submit', SubmitType::class, ['attr' => array('class' => 'btn btn-outline-primary'), 'label' => 'Speichern', 'translation_domain' => 'form']);
     }
 

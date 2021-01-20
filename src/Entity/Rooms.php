@@ -66,6 +66,16 @@ class Rooms
      */
     private $sequence;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $public;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $beschreibung;
+
     public function __construct()
     {
         $this->user = new ArrayCollection();
@@ -192,6 +202,30 @@ class Rooms
     public function setSequence(int $sequence): self
     {
         $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    public function getPublic(): ?bool
+    {
+        return $this->public;
+    }
+
+    public function setPublic(bool $public): self
+    {
+        $this->public = $public;
+
+        return $this;
+    }
+
+    public function getBeschreibung(): ?string
+    {
+        return $this->beschreibung;
+    }
+
+    public function setBeschreibung(?string $beschreibung): self
+    {
+        $this->beschreibung = $beschreibung;
 
         return $this;
     }

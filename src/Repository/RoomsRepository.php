@@ -49,83 +49,99 @@ class RoomsRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findRoomsInFuture(User $user)
+    public function findRoomsInFuture(?User $user, $isPublic = false)
     {
         $now = new \DateTime();
-        return $this->createQueryBuilder('r')
-            ->innerJoin('r.user','user')
-            ->andWhere('user = :user')
+        $qb = $this->createQueryBuilder('r')
+            ->innerJoin('r.user', 'user')
+            ->andWhere('r.public = :public')
+            ->setParameter('public', $isPublic)
             ->andWhere('r.enddate > :now')
-            ->setParameter('now', $now)
-            ->setParameter('user', $user)
-            ->orderBy('r.start', 'ASC')
+            ->setParameter('now', $now);
+        if ($user) {
+            $qb->andWhere('user = :user')
+                ->setParameter('user', $user);
+        }
+
+        return $qb->orderBy('r.start', 'ASC')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+
     }
+
     public function findRoomsInPast(User $user)
     {
         $now = new \DateTime();
         return $this->createQueryBuilder('r')
-            ->innerJoin('r.user','user')
+            ->innerJoin('r.user', 'user')
             ->andWhere('user = :user')
             ->andWhere('r.enddate < :now')
             ->setParameter('now', $now)
             ->setParameter('user', $user)
             ->orderBy('r.start', 'DESC')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
+
     public function findRoomsForUser(User $user)
     {
         $now = new \DateTime();
         return $this->createQueryBuilder('r')
-            ->innerJoin('r.user','user')
+            ->innerJoin('r.user', 'user')
             ->andWhere('user = :user')
-            ->setParameter('user', $user)
-            ->orderBy('r.start', 'ASC')
-            ->getQuery()
-            ->getResult()
-            ;
-    }
-    public function findRuningRooms(User $user)
-    {
-        $now = new \DateTime();
-        return $this->createQueryBuilder('r')
-            ->innerJoin('r.user','user')
-            ->andWhere('user = :user')
-            ->andWhere('r.enddate > :now')
-            ->andWhere('r.start < :now')
-            ->setParameter('now', $now)
             ->setParameter('user', $user)
             ->orderBy('r.start', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-    public function findTodayRooms(User $user)
+    public function findRuningRooms(?User $user, $isPublic = false)
+    {
+        $now = new \DateTime();
+        $qb = $this->createQueryBuilder('r')
+            ->innerJoin('r.user', 'user')
+            ->andWhere('r.public = :public')
+            ->setParameter('public', $isPublic)
+            ->andWhere('r.enddate > :now')
+            ->andWhere('r.start < :now')
+            ->setParameter('now', $now);
+        if ($user) {
+            $qb->andWhere('user = :user')
+                ->setParameter('user', $user);
+        }
+        return $qb->orderBy('r.start', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findTodayRooms(?User $user, $isPublic = false)
     {
         $now = new \DateTime();
         $midnight = new \DateTime();
-        $midnight->setTime(23, 59,59);
+        $midnight->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('r');
 
-        return $qb
-            ->innerJoin('r.user','user')
-            ->andWhere('user = :user')
+        $qb
+            ->innerJoin('r.user', 'user')
+            ->andWhere('r.public = :public')
+            ->setParameter('public', $isPublic)
             ->andWhere($qb->expr()->orX(
-                $qb->expr()->between('r.enddate',':now',':midnight'),
-                $qb->expr()->between('r.start',':now',':midnight'),
+                $qb->expr()->between('r.enddate', ':now', ':midnight'),
+                $qb->expr()->between('r.start', ':now', ':midnight'),
                 $qb->expr()->andX(
-                    $qb->expr()->gte('r.enddate',':midnight'),
-                    $qb->expr()->lte('r.start',':now')
+                    $qb->expr()->gte('r.enddate', ':midnight'),
+                    $qb->expr()->lte('r.start', ':now')
                 )
             ))
             ->setParameter('now', $now)
-            ->setParameter('midnight', $midnight)
-            ->setParameter('user', $user)
-            ->getQuery()
+            ->setParameter('midnight', $midnight);
+        if ($user) {
+            $qb->andWhere('user = :user')
+                ->setParameter('user', $user);
+        }
+        return $qb->getQuery()
             ->getResult();
+
     }
+
 }

@@ -25,7 +25,7 @@ class DashboardController extends AbstractController
      */
     public function index(Request $request)
     {
-        if ($this->getUser() || $this->getParameter('laF_startpage') === 'false'){
+        if ($this->getUser() || $this->getParameter('laF_startpage') === 'false') {
             return $this->redirectToRoute('dashboard');
         };
 
@@ -35,14 +35,16 @@ class DashboardController extends AbstractController
         $dataAll = base64_decode($dataStr);
         parse_str($dataAll, $data);
 
-        $form = $this->createForm(JoinViewType::class, $data,['action'=>$this->generateUrl('join_index')]);
+        $form = $this->createForm(JoinViewType::class, $data, ['action' => $this->generateUrl('join_index')]);
         $form->handleRequest($request);
 
         $user = $this->getDoctrine()->getRepository(User::class)->findAll();
         $server = $this->getDoctrine()->getRepository(Server::class)->findAll();
         $rooms = $this->getDoctrine()->getRepository(Rooms::class)->findAll();
-
-        return $this->render('dashboard/start.html.twig', ['form' => $form->createView(),'user'=>$user, 'server'=>$server, 'rooms'=>$rooms]);
+        $pubRoomsNow = $this->getDoctrine()->getRepository(Rooms::class)->findRuningRooms(null, true);
+        $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null, true);
+        $pubRoomsToday = $this->getDoctrine()->getRepository(Rooms::class)->findTodayRooms(null, true);
+        return $this->render('dashboard/start.html.twig', ['form' => $form->createView(),'nextPublic'=>$pubRoomsFuture, 'user' => $user, 'server' => $server, 'rooms' => $rooms]);
     }
 
 
@@ -67,7 +69,7 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/index.html.twig', [
             'roomsFuture' => $future,
             'roomsPast' => $roomsPast,
-            'runningRooms'=>$roomsNow,
+            'runningRooms' => $roomsNow,
             'todayRooms' => $roomsToday,
             'snack' => $request->get('snack')
         ]);
