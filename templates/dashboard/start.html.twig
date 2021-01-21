@@ -298,16 +298,24 @@
                     <div class="showcase-title pt-25 mb-3">
                    <div class="row">
                        {% for data in nextPublic %}
-                           <div class="col-md-4 text-center">
+                           <div class="col-md-4 col-lg-3 col-sm-2 text-center">
                                <div class="card">
                                    <div class="card-body">
                                        <h4 class="card-title">{{ data.name }}</h4>
-
+                                       <h5 class="h5-responsive">{{ data.start|date('d.m.Y') }}</h5>
+                                       <h5 class="h5-responsive">{{ data.start|date('H:i') }} - {{ data.enddate|date('H:i') }}</h5>
+                                        <p>{{ data.beschreibung }}</p>
+                                       <div class="card-footer">
+                                       <p>by {{ data.moderator.firstname }} {{ data.moderator.lastname }}</p>
+                                           {% if is_granted('IS_AUTHENTICATED_FULLY')%}
+                                               <a href="{{ path('room_join',{'room':data,'t':'b'}) }}">Beitreten</a>
+                                           {% else %}
+                                               <a href="{{ path('dashboard') }}" class="btn btn-primary">Login</a>
+                                           {% endif %}
+                                       </div>
                                    </div>
                                </div>
                            </div>
-
-
 
                        {% endfor %}
                    </div>

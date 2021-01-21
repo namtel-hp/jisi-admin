@@ -43,8 +43,7 @@ class DashboardController extends AbstractController
         $rooms = $this->getDoctrine()->getRepository(Rooms::class)->findAll();
         $pubRoomsNow = $this->getDoctrine()->getRepository(Rooms::class)->findRuningRooms(null, true);
         $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null, true);
-        $pubRoomsToday = $this->getDoctrine()->getRepository(Rooms::class)->findTodayRooms(null, true);
-        return $this->render('dashboard/start.html.twig', ['form' => $form->createView(),'nextPublic'=>$pubRoomsFuture, 'user' => $user, 'server' => $server, 'rooms' => $rooms]);
+        return $this->render('dashboard/start.html.twig', ['form' => $form->createView(), 'runningRooms' => $pubRoomsNow, 'nextPublic' => $pubRoomsFuture, 'user' => $user, 'server' => $server, 'rooms' => $rooms]);
     }
 
 
@@ -66,12 +65,21 @@ class DashboardController extends AbstractController
         $roomsPast = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInPast($this->getUser());
         $roomsNow = $this->getDoctrine()->getRepository(Rooms::class)->findRuningRooms($this->getUser());
         $roomsToday = $this->getDoctrine()->getRepository(Rooms::class)->findTodayRooms($this->getUser());
+        $pubRoomsNow = $this->getDoctrine()->getRepository(Rooms::class)->findRuningRooms(null, true);
+        $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null, true);
+        $public = array();
+        foreach ($pubRoomsFuture as $data) {
+            $public[$data->getStart()->format('Ymd')][] = $data;
+        }
+
         return $this->render('dashboard/index.html.twig', [
             'roomsFuture' => $future,
             'roomsPast' => $roomsPast,
             'runningRooms' => $roomsNow,
             'todayRooms' => $roomsToday,
-            'snack' => $request->get('snack')
+            'snack' => $request->get('snack'),
+            'pubRooms' => $public,
+            'pubRoomsNow' => $pubRoomsNow,
         ]);
     }
 

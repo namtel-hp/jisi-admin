@@ -54,15 +54,16 @@ class RoomsRepository extends ServiceEntityRepository
         $now = new \DateTime();
         $qb = $this->createQueryBuilder('r')
             ->innerJoin('r.user', 'user')
-            ->andWhere('r.public = :public')
-            ->setParameter('public', $isPublic)
             ->andWhere('r.enddate > :now')
             ->setParameter('now', $now);
         if ($user) {
             $qb->andWhere('user = :user')
                 ->setParameter('user', $user);
         }
-
+        if ($isPublic){
+            $qb->andWhere('r.public = :public')
+                ->setParameter('public', $isPublic);
+        }
         return $qb->orderBy('r.start', 'ASC')
             ->getQuery()
             ->getResult();
@@ -100,14 +101,16 @@ class RoomsRepository extends ServiceEntityRepository
         $now = new \DateTime();
         $qb = $this->createQueryBuilder('r')
             ->innerJoin('r.user', 'user')
-            ->andWhere('r.public = :public')
-            ->setParameter('public', $isPublic)
             ->andWhere('r.enddate > :now')
             ->andWhere('r.start < :now')
             ->setParameter('now', $now);
         if ($user) {
             $qb->andWhere('user = :user')
                 ->setParameter('user', $user);
+        }
+        if ($isPublic){
+            $qb->andWhere('r.public = :public')
+                ->setParameter('public', $isPublic);
         }
         return $qb->orderBy('r.start', 'ASC')
             ->getQuery()
@@ -123,8 +126,7 @@ class RoomsRepository extends ServiceEntityRepository
 
         $qb
             ->innerJoin('r.user', 'user')
-            ->andWhere('r.public = :public')
-            ->setParameter('public', $isPublic)
+
             ->andWhere($qb->expr()->orX(
                 $qb->expr()->between('r.enddate', ':now', ':midnight'),
                 $qb->expr()->between('r.start', ':now', ':midnight'),
@@ -138,6 +140,10 @@ class RoomsRepository extends ServiceEntityRepository
         if ($user) {
             $qb->andWhere('user = :user')
                 ->setParameter('user', $user);
+        }
+        if ($isPublic){
+            $qb->andWhere('r.public = :public')
+                ->setParameter('public', $isPublic);
         }
         return $qb->getQuery()
             ->getResult();

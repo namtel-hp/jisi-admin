@@ -1,0 +1,34 @@
+<div class="card card-body mb-1 text-lg-left text-center triggerHide">
+    <div class="row">
+
+        {% include 'dashboard/__roomDetails.html.twig' with {'room':room} %}
+
+        <div class="col-md-6 hide">
+            <div class="dropdown d-none d-lg-block ">
+                <button class="btn btn-primary dropdown-toggle" type="button"
+                        id="dropdownMenu1"
+                        data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">
+                    Starten
+                </button>
+
+                <ul class="dropdown-menu p-1" aria-labelledby="dropdownMenu1">
+                    <li><a href="{{ path('room_join',{'t':'b','room':room.id}) }}"
+                           target="_blank">Im
+                            Browser</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a title="In der Electron Jitsi Meet App"
+                           href="{{ path('room_join',{'t':'a','room':room.id}) }}"
+                           target="_blank">In
+                            der App</a></li>
+                </ul>
+            </div>
+            <div class="d-block d-lg-none">
+                <a class="btn btn-primary"
+                   href="{{ path('room_join',{'t':'b','room':room.id}) }}"
+                   target="_blank">Starten</a>
+            </div>
+        </div>
+    </div>
+</div>
+
