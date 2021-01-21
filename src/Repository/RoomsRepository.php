@@ -49,7 +49,7 @@ class RoomsRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findRoomsInFuture(?User $user, $isPublic = false)
+    public function findRoomsInFuture(?User $user,$max = null, $isPublic = false)
     {
         $now = new \DateTime();
         $qb = $this->createQueryBuilder('r')
@@ -64,6 +64,10 @@ class RoomsRepository extends ServiceEntityRepository
             $qb->andWhere('r.public = :public')
                 ->setParameter('public', $isPublic);
         }
+        if ($max){
+            $qb->setMaxResults($max);
+        }
+
         return $qb->orderBy('r.start', 'ASC')
             ->getQuery()
             ->getResult();

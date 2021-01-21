@@ -42,7 +42,7 @@ class DashboardController extends AbstractController
         $server = $this->getDoctrine()->getRepository(Server::class)->findAll();
         $rooms = $this->getDoctrine()->getRepository(Rooms::class)->findAll();
         $pubRoomsNow = $this->getDoctrine()->getRepository(Rooms::class)->findRuningRooms(null, true);
-        $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null, true);
+        $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null,4, true);
         return $this->render('dashboard/start.html.twig', ['form' => $form->createView(), 'runningRooms' => $pubRoomsNow, 'nextPublic' => $pubRoomsFuture, 'user' => $user, 'server' => $server, 'rooms' => $rooms]);
     }
 
@@ -66,7 +66,7 @@ class DashboardController extends AbstractController
         $roomsNow = $this->getDoctrine()->getRepository(Rooms::class)->findRuningRooms($this->getUser());
         $roomsToday = $this->getDoctrine()->getRepository(Rooms::class)->findTodayRooms($this->getUser());
         $pubRoomsNow = $this->getDoctrine()->getRepository(Rooms::class)->findRuningRooms(null, true);
-        $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null, true);
+        $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null, null,true);
         $public = array();
         foreach ($pubRoomsFuture as $data) {
             if($data->getModerator() != $this->getUser()){

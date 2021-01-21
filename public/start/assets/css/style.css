@@ -1600,3 +1600,8 @@ p.form-message.error {
           cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */
+.oneLine{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
