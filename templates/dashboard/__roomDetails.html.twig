@@ -1,6 +1,6 @@
 <div class="col-md-2">
     <h5 class="h5-responsive">{{ room.start|date('H:i') }} - {{ room.enddate|date('H:i') }}</h5>
-    {% if room in runningRooms %}<small class="badge badge-success">Läuft
+    {% if room in now %}<small class="badge badge-success">Läuft
         gerade</small><br>{% endif %}
     {% if app.user == room.moderator %}
         <span class="badge badge-info">Moderator</span><br>{% endif %}

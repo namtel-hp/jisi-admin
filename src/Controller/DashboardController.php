@@ -12,11 +12,11 @@ use App\Entity\Rooms;
 use App\Entity\Server;
 use App\Entity\User;
 use App\Form\Type\JoinViewType;
-use Firebase\JWT\JWT;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+
 
 class DashboardController extends AbstractController
 {
@@ -57,7 +57,7 @@ class DashboardController extends AbstractController
         }
 
         $roomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture($this->getUser());
-        $r = array();
+
         $future = array();
         foreach ($roomsFuture as $data) {
             $future[$data->getStart()->format('Ymd')][] = $data;
@@ -69,7 +69,10 @@ class DashboardController extends AbstractController
         $pubRoomsFuture = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture(null, true);
         $public = array();
         foreach ($pubRoomsFuture as $data) {
-            $public[$data->getStart()->format('Ymd')][] = $data;
+            if($data->getModerator() != $this->getUser()){
+                $public[$data->getStart()->format('Ymd')][] = $data;
+            }
+
         }
 
         return $this->render('dashboard/index.html.twig', [
