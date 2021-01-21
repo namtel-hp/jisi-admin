@@ -16,6 +16,7 @@
     <b>
         Name: {{ room.name }}
     </b>
+    <p>{{ room.beschreibung|nl2br }}</p>
     <p>Moderator: {{ room.moderator.firstName }} {{ room.moderator.lastName }}<br>
     Datum: {{ room.start|date('d.m.Y') }}<br>
     Startzeit: {{ room.start|date('H:i') }}<br>
