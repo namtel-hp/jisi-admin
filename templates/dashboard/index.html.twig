@@ -10,41 +10,64 @@
 
 
         <!-- Tabs navs -->
-        <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
-            <li class="nav-item">
-                <a data-toggle="tab"
-                   class="nav-link active"
-                   id="ex1-tab-1-tab"
-                   data-mdb-toggle="tab"
-                   href="#ex1-tabs-1"
-                   role="tab"
-                   aria-controls="ex1-tabs-1"
-                   aria-selected="true"
-                >Zukünftige Konferenzen</a>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="tab"
-                   class="nav-link"
-                   id="ex1-tab-2-tab"
-                   data-mdb-toggle="tab"
-                   href="#ex1-tabs-2"
-                   role="tab"
-                   aria-controls="ex1-tabs-2"
-                   aria-selected="false"
-                >Vergangene Konferenzen</a>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="tab"
-                   class="nav-link"
-                   id="ex1-tab-3-tab"
-                   data-mdb-toggle="tab"
-                   href="#ex1-tabs-3"
-                   role="tab"
-                   aria-controls="ex1-tabs-3"
-                   aria-selected="false"
-                >Öffentliche Konferenzen</a>
-            </li>
-        </ul>
+        <div class="d-md-block d-none">
+            <ul class="nav nav-tabs mb-3 " id="ex1" role="tablist">
+                <li class="nav-item">
+                    <a data-toggle="tab"
+                       class="nav-link active"
+                       id="ex1-tab-1-tab"
+                       data-mdb-toggle="tab"
+                       href="#ex1-tabs-1"
+                       role="tab"
+                       aria-controls="ex1-tabs-1"
+                       aria-selected="true"
+                    >Zukünftige Konferenzen</a>
+                </li>
+                <li class="nav-item">
+                    <a data-toggle="tab"
+                       class="nav-link"
+                       id="ex1-tab-2-tab"
+                       data-mdb-toggle="tab"
+                       href="#ex1-tabs-2"
+                       role="tab"
+                       aria-controls="ex1-tabs-2"
+                       aria-selected="false"
+                    >Vergangene Konferenzen</a>
+                </li>
+                <li class="nav-item">
+                    <a data-toggle="tab"
+                       class="nav-link"
+                       id="ex1-tab-3-tab"
+                       data-mdb-toggle="tab"
+                       href="#ex1-tabs-3"
+                       role="tab"
+                       aria-controls="ex1-tabs-3"
+                       aria-selected="false"
+                    >Öffentliche Konferenzen</a>
+                </li>
+
+
+            </ul>
+        </div>
+        <div class="d-md-none tabDropdown">
+            <button  class="btn btn-primary dropdown-toggle mr-4" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Zukünftige Konferenzen
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item dropdownTabToggle"
+                   href="#ex1-tab-1-tab">
+                    Zukünftige Konferenzen
+                </a>
+                <a href="#ex1-tab-2-tab"
+                   class="dropdown-item dropdownTabToggle">
+                    Vergangene Konferenzen
+                </a>
+                <a href="#ex1-tab-3-tab"
+                   class="dropdown-item dropdownTabToggle">
+                    Öffentliche Konferenzen
+                </a>
+            </div>
+        </div>
         <!-- Tabs navs -->
 
         <!-- Tabs content -->
@@ -58,7 +81,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <a href="{{ path('room_new') }}" class="loadContent">
-                            <div class="card card-body bg-success btn rounded-pill">
+                            <div class="card card-body bg-success btn">
                                 <p class="mt-2 mb-2 text-center">
                                     {{ 'Eine Konferenz planen'|trans }}
                                 </p>
@@ -66,7 +89,8 @@
                         </a>
                     </div>
                 </div>
-                {% if  roomsFuture |length == 0%}
+
+                {% if  roomsFuture |length == 0 %}
                     <div class="card card-body">
                         <p class="text-center">Aktuell sind keine Konferenzen vorhanden. Erstellen Sie <u><a
                                         href="{{ path('room_new') }}" class="loadContent">hier</a></u> eine neue
@@ -102,7 +126,7 @@
 
             </div>
             <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                <p>{{'Öffentlichen Konferenzen können Sie betreten ohne eingeladen worden zu sein.'|trans}}</p>
+                <p>{{ 'Öffentlichen Konferenzen können Sie betreten ohne eingeladen worden zu sein.'|trans }}</p>
                 {% if pubRooms |length == 0 %}
                     <div class="card card-body">
                         <p class="text-center">Aktuell sind keine Öffentlichen Konferenzen vorhanden.</p>

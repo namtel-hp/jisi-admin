@@ -18,6 +18,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
 import momentPlugin from '@fullcalendar/moment'
 import listPlugin from '@fullcalendar/list'
+
+
 $.urlParam = function (name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results == null) {
@@ -42,7 +44,7 @@ $(document).ready(function () {
         }, 3000);
     }, 500);
     h2Button.init();
-
+    initDropDown();
 
     $('#dismiss, .overlay').on('click', function () {
         // hide sidebar
@@ -128,14 +130,14 @@ $(".clickable-row").click(function () {
     window.location = $(this).data("href");
 });
 $('#ex1-tab-3-tab').on('shown.bs.tab', function (e) {
-    renderCalendar();
+    //renderCalendar();
 })
 
 function renderCalendar() {
 
     var calendarEl = document.getElementById('calendar');
     var calendar = new Calendar(calendarEl, {
-        plugins: [dayGridPlugin, bootstrapPlugin,momentPlugin,listPlugin],
+        plugins: [dayGridPlugin, bootstrapPlugin, momentPlugin, listPlugin],
         themeSystem: 'bootstrap',
         events: '/api/v1/getAllEntries',
         lang: 'de',
@@ -145,4 +147,16 @@ function renderCalendar() {
     });
     calendar.render();
 
+}
+
+function initDropDown() {
+    $('.dropdownTabToggle').click(function (e) {
+        e.preventDefault();
+        var $ele = $(this);
+        var $target = $ele.attr('href');
+        $($target).tab('show');
+        $ele.closest('.tabDropdown').find('button').text($ele.text());
+        $ele.closest('.dropdown-menu').find('.active').removeClass('active');
+        $ele.addClass('active');
+    })
 }

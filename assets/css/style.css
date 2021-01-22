@@ -599,3 +599,16 @@ label.required:after {
     align-items: center;
 
 }
+.dropdown-toggle[aria-expanded="false"]:before{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0d7";
+    padding-right: 4px;
+}
+.dropdown-toggle[aria-expanded="true"]:before{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0d8";
+    padding-right: 4px;
+
+}
