@@ -6,6 +6,7 @@ use App\Repository\RoomsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoomsRepository::class)
@@ -26,6 +27,7 @@ class Rooms
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank()
      */
     private $start;
 
@@ -84,6 +86,7 @@ class Rooms
     public function __construct()
     {
         $this->user = new ArrayCollection();
+        $this->start = (new \DateTime())->modify('+1day')->setTime(12,0);
     }
 
     public function getId(): ?int
