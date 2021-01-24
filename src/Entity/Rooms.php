@@ -76,6 +76,11 @@ class Rooms
      */
     private $onlyRegisteredUsers;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $deleted;
+
     public function __construct()
     {
         $this->user = new ArrayCollection();
@@ -226,6 +231,18 @@ class Rooms
     public function setOnlyRegisteredUsers(bool $onlyRegisteredUsers): self
     {
         $this->onlyRegisteredUsers = $onlyRegisteredUsers;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

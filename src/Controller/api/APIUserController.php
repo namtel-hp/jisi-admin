@@ -40,7 +40,24 @@ class APIUserController extends AbstractController
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
-
+    /**
+     * @Route("/api/v1/futureEntries", name="apiV1_getFutireEntries")
+     */
+    public function futureEntries(Request $request,RoomService $roomService): Response
+    {
+        $clientApi = $this->getDoctrine()->getRepository(ApiKeys::class)->findOneBy(array('clientSecret' => $request->get('clientSecret')));
+        if (!$clientApi) {
+            return new JsonResponse(array('error' => true, 'text' => 'No Access'));
+        };
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($request->get('email'));
+        $rooms = $this->getDoctrine()->getRepository(Rooms::class)->findRoomsInFuture($user);
+        $res = array();
+        foreach ($rooms as $data) {
+            $res[] = $roomService->generateRoomInfo($data);
+        }
+        $response = new JsonResponse($res);
+        return $response;
+    }
     /**
      * @Route("/api/v1/{uidReal}", name="apiV1_roomGetUser",methods={"GET"})
      */

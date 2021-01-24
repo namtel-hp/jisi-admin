@@ -70,21 +70,6 @@ class RoomService
         return $room;
     }
 
-    public function deleteRoom(Rooms $room)
-    {
-        // We delete the Room
-
-
-        foreach ($room->getUser() as $user) {
-            $this->userService->removeRoom($user, $room);
-            $room->removeUser($user);
-            $this->em->persist($room);
-        }
-        $room->setModerator(null);
-        $this->em->persist($room);
-        $this->em->flush();
-        return $room;
-    }
 
     public function removeUserFromRoom(?Rooms $room, $email): array
     {

@@ -22,12 +22,12 @@ class RoomService
 {
     private $em;
     private $logger;
-
-    public function __construct(EntityManagerInterface $entityManager, FormFactoryInterface $formBuilder, LoggerInterface $logger)
+    private $userService;
+    public function __construct(EntityManagerInterface $entityManager, FormFactoryInterface $formBuilder, LoggerInterface $logger,UserService $userService)
     {
         $this->em = $entityManager;
         $this->logger = $logger;
-
+        $this->userService=$userService;
     }
 
     function join(Rooms $room, User $user, $t, $userName)
@@ -68,5 +68,12 @@ class RoomService
 
         return $url;
     }
-
+    public function removeRoom(Rooms $room){
+        $room->setDeleted(true);
+        foreach ($room->getUser() as $user) {
+            $this->userService->removeRoom($user, $room);
+        }
+        $this->em->persist($room);
+        $this->em->flush();
+    }
 }

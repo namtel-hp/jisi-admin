@@ -57,7 +57,7 @@ class APIRoomController extends AbstractController
     /**
      * @Route("/api/v1/room", name="apiV1_roomDelete", methods={"DELETE"})
      */
-    public function removeRoom(Request $request,  ParameterBagInterface $parameterBag, RoomService $roomService): Response
+    public function removeRoom(Request $request,  ParameterBagInterface $parameterBag, \App\Service\RoomService $roomService): Response
     {
         $clientApi = $this->getDoctrine()->getRepository(ApiKeys::class)->findOneBy(array('clientSecret' => $request->get('clientSecret')));
         if (!$clientApi) {
@@ -68,7 +68,7 @@ class APIRoomController extends AbstractController
         if (!$room) {
             return new JsonResponse(array('error' => true, 'text' => 'Room not found '));
         };
-        $roomService->deleteRoom($room);
+        $roomService->removeRoom($room);
         return new JsonResponse(array('error'=>false,'text'=>'Erfolgreich gelöscht'));
     }
     /**
