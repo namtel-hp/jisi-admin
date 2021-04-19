@@ -81,8 +81,13 @@ class JoinController extends AbstractController
                 if ($this->onlyWithUserAccount($room, $user) || $this->userAccountLogin($room, $user)) {
                     return $this->redirectToRoute('room_join', ['room' => $room->getId(), 't' => $type]);
                 }
-                $url = $roomService->join($room, $user, $type, $search['name']);
-                $res = $this->redirect($url);
+                $urlBrowser = $roomService->join($room, $user, 'b', $search['name']);
+                $urlApp = $roomService->join($room, $user, 'a', $search['name']);
+
+//                $url = $roomService->join($room, $user, $type, $search['name']);
+//                $res = $this->redirect($url);
+                $res = $this->render('join/redirect.html.twig',array('urlApp'=>$urlApp, 'urlBrowser'=>$urlBrowser));
+
                 $res->headers->setCookie(new Cookie('name', $search['name'], (new \DateTime())->modify('+365 days')));
                 return $res;
 

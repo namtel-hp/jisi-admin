@@ -168,8 +168,14 @@ class RoomController extends AbstractController
     {
 
         if (in_array($this->getUser(), $room->getUser()->toarray())) {
-            $url = $roomService->join($room, $this->getUser(), $t, $this->getUser()->getFirstName() . ' ' . $this->getUser()->getLastName());
-            return $this->redirect($url);
+//            $url = $roomService->join($room, $this->getUser(), $t, $this->getUser()->getFirstName() . ' ' . $this->getUser()->getLastName());
+//            return $this->redirect($url);
+            $urlBrowser = $roomService->join($room,$this->getUser(), 'b', $this->getUser()->getFirstName() . ' ' . $this->getUser()->getLastName());
+            $urlApp = $roomService->join($room, $this->getUser(), 'a', $this->getUser()->getFirstName() . ' ' . $this->getUser()->getLastName());
+
+            $res = $this->render('join/redirect.html.twig',array('server'=>$room->getServer(),'urlApp'=>$urlApp, 'urlBrowser'=>$urlBrowser));
+            return $res;
+
         }
 
         return $this->redirectToRoute('dashboard', ['join_room' => $room->getId(), 'type' => $t]);
